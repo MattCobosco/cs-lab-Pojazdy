@@ -9,7 +9,10 @@ namespace cs_lab_Pojazdy
         private static void Main(string[] args)
         {
             var plane = new AirVehicle(200, true, IVehicle.FuelType.Petrol);
-            
+            Console.WriteLine(plane.ToString());
+            plane.IncreaseSpeed(1);
+            Console.WriteLine(plane.ToString());
+            plane.IncreaseSpeed(50);
             Console.WriteLine(plane.ToString());
         }
     }

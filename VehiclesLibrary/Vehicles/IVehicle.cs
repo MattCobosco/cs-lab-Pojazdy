@@ -23,7 +23,7 @@ namespace ClassLibrary.Vehicles
         }
 
         public static int Speed { get; set; } // in kph regardless of environment
-        public VehicleState State => Speed > 0 ? VehicleState.Moving : VehicleState.Stationary;
+        public VehicleState State { get; set; }
         public bool HasEngine { get; }
         public int Horsepower { get; }
 
@@ -52,17 +52,17 @@ namespace ClassLibrary.Vehicles
 
         public void Stop()
         {
-            if (CurrentEnvironment.Type == IEnvironment.EnvironmentType.Water) DecreaseSpeed(Speed);
+            if (CurrentEnvironment.Type == IEnvironment.EnvironmentType.Water) 
+                DecreaseSpeed(Speed);
         }
         
-        public int GetConvertedSpeed()
+        public int GetConvertedSpeed(IEnvironment.SpeedUnit unit, int speed)
         {
-            return CurrentEnvironment.Type switch
+            return unit switch
             {
-                IEnvironment.EnvironmentType.Air => (int)(Speed * 3.6),
-                IEnvironment.EnvironmentType.Water => (int)(Speed * 1.852),
-                IEnvironment.EnvironmentType.Land => Speed,
-                _ => throw new Exception()
+                IEnvironment.SpeedUnit.Knots => (int) (speed * 1.852),
+                IEnvironment.SpeedUnit.Mps => (int) (speed * 3.6),
+                _ => speed
             };
         }
     }
