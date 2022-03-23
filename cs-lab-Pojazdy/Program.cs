@@ -12,7 +12,7 @@ namespace cs_lab_Pojazdy
             Console.WriteLine(plane.ToString());
             plane.IncreaseSpeed(1);
             Console.WriteLine(plane.ToString());
-            plane.IncreaseSpeed(50);
+            plane.IncreaseSpeed(80);
             Console.WriteLine(plane.ToString());
         }
     }

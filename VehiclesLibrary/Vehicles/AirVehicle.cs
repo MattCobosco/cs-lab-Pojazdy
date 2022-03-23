@@ -13,7 +13,7 @@ namespace ClassLibrary.Vehicles
             FuelType = fuelType;
             // air vehicle spawns on the ground
             CurrentEnvironment = IEnvironment.Environments.LandEnvironment;
-            // air vehicle spawns stationary
+            // air vehicle spawns as stationary
             State = IVehicle.VehicleState.Stationary;
         }
 
@@ -34,10 +34,11 @@ namespace ClassLibrary.Vehicles
                 State = IVehicle.VehicleState.Moving;
             }
             
-            // TODO: fix instant takeoff issue
+            // Takeoff procedure
+            // If vehicle is already in the air => return;
             if (CurrentEnvironment == IEnvironment.Environments.AirEnvironment) return;
-            if (Speed / 3.6 >= IEnvironment.Environments.AirEnvironment.MinSpeed)
-                Speed = (int) (Speed / 3.6);
+            // if the speed is not enough to take off => return
+            if (!(Speed / 3.6 >= IEnvironment.Environments.AirEnvironment.MinSpeed)) return;
             CurrentEnvironment = IEnvironment.Environments.AirEnvironment; // takeoff
         }
 
