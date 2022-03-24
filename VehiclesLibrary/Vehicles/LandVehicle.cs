@@ -25,19 +25,12 @@ namespace ClassLibrary.Vehicles
 
         public void Start()
         {
-            // if plane is already moving it cannot be started
-            if (State == IVehicle.VehicleState.Moving) return;
             Speed = IEnvironment.Environments.LandEnvironment.MinSpeed;
             State = IVehicle.VehicleState.Moving;
         }
 
         public void Stop()
         {
-            // if plane is in the air it cannot be stopped
-            if (CurrentEnvironment == IEnvironment.Environments.AirEnvironment) return;
-
-            // if plane is already stopped on the ground it cannot be stopped again
-            if (State != IVehicle.VehicleState.Moving) return;
             Speed = 0;
             State = IVehicle.VehicleState.Stationary;
         }
