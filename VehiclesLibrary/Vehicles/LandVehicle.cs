@@ -22,6 +22,35 @@ namespace ClassLibrary.Vehicles
         public IVehicle.VehicleState State { get; set; }
         public bool HasEngine { get;}
 
+        public void IncreaseSpeed(int change)
+        {
+            if (Speed + change <= IEnvironment.Environments.LandEnvironment.MaxSpeed)
+            {
+                Speed += change;
+            }
+            else
+            {
+                Speed = IEnvironment.Environments.LandEnvironment.MaxSpeed;
+            }
+
+            if (Speed > 0)
+            {
+                State = IVehicle.VehicleState.Moving;
+            }
+        }
+
+        public void DecreaseSpeed(int change)
+        {
+            if (Speed - change >= IEnvironment.Environments.LandEnvironment.MinSpeed)
+            {
+                Speed -= change;
+            }
+            else
+            {
+                Speed = IEnvironment.Environments.LandEnvironment.MinSpeed;
+            }
+        }
+
         public override string ToString()
         {
             var vehicle = (IVehicle)this;
