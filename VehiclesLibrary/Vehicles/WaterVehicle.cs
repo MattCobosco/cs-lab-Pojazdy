@@ -72,12 +72,22 @@ namespace ClassLibrary.Vehicles
             }
         }
         
-        // TODO: GoOnLand, GoOnWater
+        // TODO: GoOnLand, GoOnWater - check speed differences between the environments
+        public void GoOnWater()
+        {
+            
+        }
+
+        public void GoOnLand()
+        {
+            
+        }
 
         public override string ToString()
         {
             var vehicle = (IVehicle) this;
             var unit = CurrentEnvironment.Unit;
+            // TODO: Smarter strings
             if (_amphibious)
             {
                 return $"Type: Amphibious Vehicle, Number of wheels: {_wheelCount}" +
@@ -89,8 +99,12 @@ namespace ClassLibrary.Vehicles
             }
             else
             {
-                // TODO: Return for non-amphibious
-                return $"";
+                return $"Type: Water Vehicle, Displacement {_displacement}, " +
+                       $"Horsepower: {Horsepower}, Has Engine: {HasEngine}, " +
+                       $"Fuel Type: {_fuelType}, Current Environment {CurrentEnvironment.Type}, " +
+                       $"State: {vehicle.State}, Min Speed: {CurrentEnvironment.MinSpeed} {unit}," +
+                       $"Max Speed: {CurrentEnvironment.MaxSpeed} {unit}," +
+                       $"Speed: {vehicle.GetConvertedSpeed(unit, Speed)}";
             }
         }
     }
