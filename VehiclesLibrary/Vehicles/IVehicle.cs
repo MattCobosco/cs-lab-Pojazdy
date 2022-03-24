@@ -60,8 +60,8 @@ namespace ClassLibrary.Vehicles
         {
             return unit switch
             {
-                IEnvironment.SpeedUnit.Knots => (int) (speed * 1.852),
-                IEnvironment.SpeedUnit.Mps => (int) (speed * 3.6),
+                IEnvironment.SpeedUnit.Knots => (int) (speed / 1.852),
+                IEnvironment.SpeedUnit.Mps => (int) (speed / 3.6),
                 _ => speed
             };
         }

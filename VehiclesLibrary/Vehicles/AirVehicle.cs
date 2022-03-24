@@ -26,29 +26,61 @@ namespace ClassLibrary.Vehicles
 
         public void IncreaseSpeed(int change)
         {
-            if (Speed + change <= CurrentEnvironment.MaxSpeed) 
-                Speed += change;
+            // if vehicle is in air => check max speed boundary and increase speed
+            if (CurrentEnvironment == IEnvironment.Environments.AirEnvironment)
+            {
+                if (Speed + change <= IEnvironment.Environments.AirEnvironment.MaxSpeed)
+                {
+                    Speed += change;
+                }
+
+                return;
+            }
+
+            Speed += change;
+            // Takeoff procedure
+            // if the speed is not enough to take off => return
+            if (!(Speed * 3.6 >= IEnvironment.Environments.AirEnvironment.MinSpeed)) return;
+            CurrentEnvironment = IEnvironment.Environments.AirEnvironment; // takeoff
 
             if (Speed > 0)
             {
                 State = IVehicle.VehicleState.Moving;
             }
-            
-            // Takeoff procedure
-            // If vehicle is already in the air => return;
-            if (CurrentEnvironment == IEnvironment.Environments.AirEnvironment) return;
-            // if the speed is not enough to take off => return
-            if (!(Speed / 3.6 >= IEnvironment.Environments.AirEnvironment.MinSpeed)) return;
-            CurrentEnvironment = IEnvironment.Environments.AirEnvironment; // takeoff
         }
 
         public void DecreaseSpeed(int change)
         {
+            // if vehicle is on land
+            if (CurrentEnvironment == IEnvironment.Environments.LandEnvironment)
+            {
+                // is requested speed change results in a speed greater than min land speed
+                if (Speed - change <= IEnvironment.Environments.LandEnvironment.MinSpeed)
+                {
+                    // reduces speed
+                    Speed -= change;
+                }
+                else
+                {
+                    // else sets speed to min land speed
+                    Speed = IEnvironment.Environments.LandEnvironment.MinSpeed;
+                }
+
+                // does not go to the landing procedure: vehicle already on land
+                return;
+            }
+
+            // Landing procedure
+            // reduces speed
+            Speed -= change;
+            // if the speed is too high to land => return
+            if ((Speed - change) / 3.6 >= IEnvironment.Environments.AirEnvironment.MinSpeed) return;
+            CurrentEnvironment = IEnvironment.Environments.LandEnvironment; // landing
         }
 
         public override string ToString()
         {
-            var vehicle = (IVehicle)this;
+            var vehicle = (IVehicle) this;
             var unit = CurrentEnvironment.Unit;
             return $"Type: Air Vehicle, Has Engine: {HasEngine}, " +
                    $"Current Environment: {CurrentEnvironment.Type}, " +
