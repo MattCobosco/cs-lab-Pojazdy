@@ -23,6 +23,18 @@ namespace ClassLibrary.Vehicles
         public int Horsepower { get; }
         public IVehicle.VehicleState State { get; set; }
         public bool HasEngine { get; }
+        
+        public void Start()
+        {
+            Speed = IEnvironment.Environments.LandEnvironment.MinSpeed;
+            State = IVehicle.VehicleState.Moving;
+        }
+
+        public void Stop()
+        {
+            Speed = 0;
+            State = IVehicle.VehicleState.Stationary;
+        }
 
         public void IncreaseSpeed(int change)
         {

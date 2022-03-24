@@ -8,19 +8,19 @@ namespace cs_lab_Pojazdy
     {
         private static void Main(string[] args)
         {
-            /* AirVehicle
-             var plane = new AirVehicle(200, true, IVehicle.FuelType.Petrol);
+            /* AirVehicle */ 
+            var plane = new AirVehicle(200, true, IVehicle.FuelType.Petrol);
             Console.WriteLine(plane.ToString());
-            plane.IncreaseSpeed(1);
+            plane.Start();
             Console.WriteLine(plane.ToString());
             plane.IncreaseSpeed(715);
             Console.WriteLine(plane.ToString());
-            plane.DecreaseSpeed(700);
+            plane.Stop();
             Console.WriteLine(plane.ToString());
-            */
 
             
-            var car = new LandVehicle(85, true, IVehicle.FuelType.Diesel, 4);
+            /* Land Vehicle
+             var car = new LandVehicle(85, true, IVehicle.FuelType.Diesel, 4);
             Console.WriteLine(car.ToString());
             car.IncreaseSpeed(20);
             Console.WriteLine(car.ToString());
@@ -30,6 +30,7 @@ namespace cs_lab_Pojazdy
             Console.WriteLine(car.ToString());
             car.DecreaseSpeed(300);
             Console.WriteLine(car.ToString());
+            */
         }
     }
 }
