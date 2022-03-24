@@ -22,14 +22,14 @@ namespace ClassLibrary.Vehicles
             Stationary
         }
 
-        public static int Speed { get; set; } // in kph regardless of environment
-        public VehicleState State { get; set; }
+        public static double Speed { get; set; }
+        public VehicleState State { get; }
         public bool HasEngine { get; }
         public int Horsepower { get; }
 
         public static IEnvironment CurrentEnvironment { get; }
 
-        public void IncreaseSpeed(int change)
+        public void IncreaseSpeed(double change)
         {
             if (Speed + change > CurrentEnvironment.MaxSpeed)
                 Speed = CurrentEnvironment.MaxSpeed;
@@ -37,7 +37,7 @@ namespace ClassLibrary.Vehicles
                 Speed += change;
         }
 
-        public void DecreaseSpeed(int change)
+        public void DecreaseSpeed(double change)
         {
             if (Speed - change < CurrentEnvironment.MinSpeed)
                 Speed = 0;
@@ -56,12 +56,12 @@ namespace ClassLibrary.Vehicles
                 DecreaseSpeed(Speed);
         }
         
-        public int GetConvertedSpeed(IEnvironment.SpeedUnit unit, int speed)
+        public double GetConvertedSpeed(IEnvironment.SpeedUnit unit, double speed)
         {
             return unit switch
             {
-                IEnvironment.SpeedUnit.Knots => (int) (speed / 1.852),
-                IEnvironment.SpeedUnit.Mps => (int) (speed / 3.6),
+                IEnvironment.SpeedUnit.Knots => speed / 1.852,
+                IEnvironment.SpeedUnit.Mps => speed / 3.6,
                 _ => speed
             };
         }
