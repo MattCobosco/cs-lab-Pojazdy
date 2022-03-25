@@ -110,11 +110,13 @@ namespace ClassLibrary.Vehicles
         public override string ToString()
         {
             var vehicle = (IVehicle) this;
+            var currentUnit = CurrentEnvironment.Unit;
+            var nativeUnit = NativeEnvironment.Unit;
             return $"Type: Air Vehicle, Has Engine: {HasEngine}, " +
                    $"Current Environment: {CurrentEnvironment.Type}, " +
-                   $"State: {vehicle.State}, Min Speed: {CurrentEnvironment.MinSpeed} {CurrentEnvironment.Unit}, " +
-                   $"Max Speed: {CurrentEnvironment.MaxSpeed} {CurrentEnvironment.Unit}, " +
-                   $"Speed: {vehicle.GetConvertedSpeed(NativeEnvironment.Unit, CurrentEnvironment.Unit, Speed)} {CurrentEnvironment.Unit}, " +
+                   $"State: {vehicle.State}, Min Speed: {CurrentEnvironment.MinSpeed} {currentUnit}, " +
+                   $"Max Speed: {CurrentEnvironment.MaxSpeed} {currentUnit}, " +
+                   $"Speed: {vehicle.GetConvertedSpeed(nativeUnit, currentUnit, Speed)} {currentUnit}, " +
                    $"Horsepower: {Horsepower}, Fuel Type: {FuelType}";
         }
     }
