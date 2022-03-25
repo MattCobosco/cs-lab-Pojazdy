@@ -4,28 +4,30 @@ namespace ClassLibrary.Vehicles
 {
     public class LandVehicle : IVehicle
     {
+        // LandVehicle spawns on the ground
+        private readonly IEnvironment CurrentEnvironment = IEnvironment.Environments.LandEnvironment;
+
         public LandVehicle(int horsepower, bool hasEngine, IVehicle.FuelType fuelType, int wheelCount)
         {
             Horsepower = horsepower;
             HasEngine = hasEngine;
             FuelType = fuelType;
             WheelCount = wheelCount;
-            // land vehicle spawns stationary
-            State = IVehicle.VehicleState.Stationary;
-            CurrentEnvironment = IEnvironment.Environments.LandEnvironment;
         }
 
         private double Speed { get; set; }
-        private IEnvironment CurrentEnvironment { get; }
         private IVehicle.FuelType FuelType { get; }
         private int WheelCount { get; }
+
         public int Horsepower { get; }
-        public IVehicle.VehicleState State { get; private set; }
+
+        // LandVehicle Spawns as stationary
+        public IVehicle.VehicleState State { get; private set; } = IVehicle.VehicleState.Stationary;
         public bool HasEngine { get; }
 
         public void Start()
         {
-            Speed = IEnvironment.Environments.LandEnvironment.MinSpeed;
+            Speed = CurrentEnvironment.MinSpeed;
             State = IVehicle.VehicleState.Moving;
         }
 
@@ -35,20 +37,20 @@ namespace ClassLibrary.Vehicles
             State = IVehicle.VehicleState.Stationary;
         }
 
-        public void IncreaseSpeed(double change)
+        public void IncreaseSpeed(double changeInKps)
         {
-            if (Speed + change <= IEnvironment.Environments.LandEnvironment.MaxSpeed)
-                Speed += change;
+            if (Speed + changeInKps <= IEnvironment.Environments.LandEnvironment.MaxSpeed)
+                Speed += changeInKps;
             else
                 Speed = IEnvironment.Environments.LandEnvironment.MaxSpeed;
 
             if (Speed > 0) State = IVehicle.VehicleState.Moving;
         }
 
-        public void DecreaseSpeed(double change)
+        public void DecreaseSpeed(double changeInKps)
         {
-            if (Speed - change >= IEnvironment.Environments.LandEnvironment.MinSpeed)
-                Speed -= change;
+            if (Speed - changeInKps >= IEnvironment.Environments.LandEnvironment.MinSpeed)
+                Speed -= changeInKps;
             else
                 Speed = IEnvironment.Environments.LandEnvironment.MinSpeed;
 
@@ -58,12 +60,12 @@ namespace ClassLibrary.Vehicles
         public override string ToString()
         {
             var vehicle = (IVehicle) this;
-            var unit = CurrentEnvironment.Unit;
+            var currentUnit = CurrentEnvironment.Unit;
             return $"Type: Land Vehicle, Number of wheels: {WheelCount} " +
                    $"Horsepower: {Horsepower}, Fuel type: {FuelType} " +
                    $"Current Environment: {CurrentEnvironment.Type}, " +
-                   $"State: {vehicle.State}, Min Speed: {CurrentEnvironment.MinSpeed} {unit}, " +
-                   $"Max Speed: {CurrentEnvironment.MaxSpeed} {unit}, Speed: {vehicle.GetConvertedSpeed(unit, Speed)} {unit}";
+                   $"State: {vehicle.State}, Min Speed: {CurrentEnvironment.MinSpeed} {currentUnit}, " +
+                   $"Max Speed: {CurrentEnvironment.MaxSpeed} {currentUnit}, Speed: {Speed} {currentUnit}";
         }
     }
 }
