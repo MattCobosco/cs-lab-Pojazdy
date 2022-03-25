@@ -14,7 +14,7 @@ namespace ClassLibrary.Vehicles
             FuelType = fuelType;
         }
 
-        // native speed unit for AirVehicles is meters per second, all requested speed changes are made in mps
+        // native speed unit for AirVehicle is meters per second, all requested speed changes are made in mps
         private double Speed { get; set; }
 
         // AirVehicle spawns on the ground
@@ -101,13 +101,12 @@ namespace ClassLibrary.Vehicles
             if (Speed - changeInMps >= IEnvironment.Environments.AirEnvironment.MinSpeed)
                 return;
             CurrentEnvironment = IEnvironment.Environments.LandEnvironment; // landing
-            // if requested speed is smaller than land min speed, sets min speed as speed
-            if (Speed < CurrentEnvironment.MinSpeed)
+            if (Speed < CurrentEnvironment.MinSpeed) // check speed: can't be less than land min speed
                 Speed = vehicle.GetConvertedSpeed(IEnvironment.SpeedUnit.Kph, IEnvironment.SpeedUnit.Mps,
                     CurrentEnvironment.MinSpeed);
         }
 
-        // current speed is shown in unit of the current environment
+        // current speed is shown in the current environment speed unit
         public override string ToString()
         {
             var vehicle = (IVehicle) this;
