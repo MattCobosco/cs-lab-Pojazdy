@@ -1,67 +1,80 @@
 ﻿using System;
-using System.Xml.Schema;
 using ClassLibrary.Environments;
 
 namespace ClassLibrary.Vehicles
 {
     public interface IVehicle
     {
-        public enum FuelType
+        enum FuelType
         {
             Petrol,
-            Lpg,
             Diesel,
             Electric,
+            Hybrid,
             Other,
             None
         }
 
-        public enum VehicleState
+        enum State
         {
             Moving,
             Stationary
         }
 
-        public static double Speed { get; set; }
-        public VehicleState State { get; }
-        public bool HasEngine { get; }
-        public int Horsepower { get; }
-
-        public static IEnvironment CurrentEnvironment { get; }
-
-        public void IncreaseSpeed(double change)
+        enum VehicleType
         {
-            if (Speed + change > CurrentEnvironment.MaxSpeed)
-                Speed = CurrentEnvironment.MaxSpeed;
-            else
-                Speed += change;
-        }
-
-        public void DecreaseSpeed(double change)
-        {
-            if (Speed - change < CurrentEnvironment.MinSpeed)
-                Speed = 0;
-            else
-                Speed -= change;
-        }
-
-        public void Start()
-        {
-            IncreaseSpeed(CurrentEnvironment.MinSpeed);
-        }
-
-        public void Stop()
-        {
-            if (CurrentEnvironment.Type == IEnvironment.EnvironmentType.Water) 
-                DecreaseSpeed(Speed);
+            LandVehicle,
+            WaterVehicle,
+            AirVehicle,
+            MultipurposeVehicle
         }
         
-        public double GetConvertedSpeed(IEnvironment.SpeedUnit unit, double speed)
+        VehicleType Type { get; set; }
+        IEnvironment CurrentEnvironment { get; set; }
+        IEnvironment NativeEnvironment { get; set; }
+        double Speed { get; set; }
+        bool HasEngine { get; set; }
+        int HorsePower { get; set; }
+        FuelType Fuel { get; set; }
+        State VehicleState { get; set; }
+
+        void Stop()
         {
-            return unit switch
+            Speed = 0;
+            VehicleState = State.Stationary;
+        }
+
+        void Start()
+        {
+            Speed = GetConvertedSpeed(CurrentEnvironment.Unit, NativeEnvironment.Unit, CurrentEnvironment.MinSpeed);
+            VehicleState = State.Moving;
+        }
+
+        void Accelerate(double speedInNativeUnit)
+        {
+            Speed += Math.Min(
+                GetConvertedSpeed(CurrentEnvironment.Unit, NativeEnvironment.Unit, CurrentEnvironment.MaxSpeed),
+                GetConvertedSpeed(CurrentEnvironment.Unit, NativeEnvironment.Unit, speedInNativeUnit));
+
+            if (Speed > 0)
+                VehicleState = State.Moving;
+        }
+
+        void Decelerate(double speedInNativeUnit)
+        {
+            Speed -= Math.Max(
+                GetConvertedSpeed(CurrentEnvironment.Unit, NativeEnvironment.Unit, CurrentEnvironment.MinSpeed),
+                GetConvertedSpeed(CurrentEnvironment.Unit, NativeEnvironment.Unit, speedInNativeUnit));
+        }
+
+        static double GetConvertedSpeed(IEnvironment.SpeedUnit fromUnit, IEnvironment.SpeedUnit toUnit, double speed)
+        {
+            return fromUnit switch
             {
-                IEnvironment.SpeedUnit.Knots => speed / 1.852,
-                IEnvironment.SpeedUnit.Mps => speed / 3.6,
+                IEnvironment.SpeedUnit.Kph when toUnit == IEnvironment.SpeedUnit.Mps => speed / 3.6,
+                IEnvironment.SpeedUnit.Mps when toUnit == IEnvironment.SpeedUnit.Kph => speed * 3.6,
+                IEnvironment.SpeedUnit.Kph when toUnit == IEnvironment.SpeedUnit.Knots => speed * 1.852,
+                IEnvironment.SpeedUnit.Knots when toUnit == IEnvironment.SpeedUnit.Kph => speed / 1.852,
                 _ => speed
             };
         }
