@@ -11,6 +11,7 @@ namespace ClassLibrary.Vehicles
             Diesel,
             Electric,
             Hybrid,
+            Avgas,
             Other,
             None
         }
@@ -35,36 +36,44 @@ namespace ClassLibrary.Vehicles
         double Speed { get; set; }
         bool HasEngine { get; set; }
         int HorsePower { get; set; }
-        FuelType Fuel { get; set; }
+        FuelType FuelUsed { get; set; }
         State VehicleState { get; set; }
 
         void Stop()
         {
+            // Vehicle cannot be stopped mid-air
+            if (CurrentEnvironment == IEnvironment.Environments.AirEnvironment) return;
+            // A stationary vehicle cannot be stopped
+            if (VehicleState == State.Stationary) return;
             Speed = 0;
             VehicleState = State.Stationary;
         }
 
         void Start()
         {
+            // A moving vehicle cannot be started
+            if (VehicleState == State.Moving) return;
+            // A started vehicle reaches the current environment minimum speed
             Speed = GetConvertedSpeed(CurrentEnvironment.Unit, NativeEnvironment.Unit, CurrentEnvironment.MinSpeed);
             VehicleState = State.Moving;
         }
 
-        void Accelerate(double speedInNativeUnit)
+        void Accelerate(double changeInNativeUnit)
         {
-            Speed += Math.Min(
+            // A stationary vehicle cannot accelerate
+            if (VehicleState == State.Stationary) return;
+            Speed = Math.Min(
                 GetConvertedSpeed(CurrentEnvironment.Unit, NativeEnvironment.Unit, CurrentEnvironment.MaxSpeed),
-                GetConvertedSpeed(CurrentEnvironment.Unit, NativeEnvironment.Unit, speedInNativeUnit));
-
-            if (Speed > 0)
-                VehicleState = State.Moving;
+                GetConvertedSpeed(CurrentEnvironment.Unit, NativeEnvironment.Unit, Speed + changeInNativeUnit));
         }
 
-        void Decelerate(double speedInNativeUnit)
+        void Decelerate(double changeInNativeUnit)
         {
-            Speed -= Math.Max(
+            // A stationary vehicle cannot decelerate
+            if (VehicleState == State.Stationary) return;
+            Speed = Math.Max(
                 GetConvertedSpeed(CurrentEnvironment.Unit, NativeEnvironment.Unit, CurrentEnvironment.MinSpeed),
-                GetConvertedSpeed(CurrentEnvironment.Unit, NativeEnvironment.Unit, speedInNativeUnit));
+                GetConvertedSpeed(CurrentEnvironment.Unit, NativeEnvironment.Unit, Speed - changeInNativeUnit));
         }
 
         static double GetConvertedSpeed(IEnvironment.SpeedUnit fromUnit, IEnvironment.SpeedUnit toUnit, double speed)
