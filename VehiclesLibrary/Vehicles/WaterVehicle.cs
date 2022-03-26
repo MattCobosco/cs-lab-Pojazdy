@@ -1,8 +1,10 @@
 #nullable enable
+using System.Xml.Schema;
 using ClassLibrary.Environments;
 
 namespace ClassLibrary.Vehicles
 {
+    // TODO: Finish WaterVehicle class
     public class WaterVehicle : IVehicle
     {
         public IVehicle.VehicleType Type { get; set; }

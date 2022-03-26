@@ -2,6 +2,7 @@
 
 namespace ClassLibrary.Vehicles
 {
+    // TODO: Finish AirVehicle class
     public class AirVehicle : IVehicle
     {
         public IVehicle.VehicleType Type { get; set; } = IVehicle.VehicleType.AirVehicle;

@@ -8,6 +8,7 @@ namespace cs_lab_Pojazdy
     {
         private static void Main(string[] args)
         {
+            // TODO: Test LandVehicle more
             IVehicle car = new LandVehicle(true, 85, IVehicle.FuelType.Diesel, 4);
             car.Start();
             Console.WriteLine(car.Speed.ToString());
