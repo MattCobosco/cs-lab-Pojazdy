@@ -8,13 +8,15 @@ namespace cs_lab_Pojazdy
     {
         private static void Main(string[] args)
         {
-            // TODO: Test LandVehicle more
-            IVehicle car = new LandVehicle(true, 85, IVehicle.FuelType.Diesel, 4);
-            car.Start();
-            Console.WriteLine(car.Speed.ToString());
-            car.Accelerate(5);
-            Console.WriteLine(car.Speed.ToString());
-            Console.WriteLine(car.ToString());
+            IVehicle airplane = new AirVehicle(true, 500, IVehicle.FuelType.Avgas);
+            airplane.Start();
+            Console.WriteLine(airplane.ToString());
+            airplane.Accelerate(15);
+            Console.WriteLine(airplane.ToString());
+            airplane.Decelerate(10);
+            Console.WriteLine(airplane.ToString());
+            airplane.Stop();
+            Console.WriteLine(airplane.ToString());
         }
     }
 }
