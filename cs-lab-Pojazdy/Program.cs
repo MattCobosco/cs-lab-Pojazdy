@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using ClassLibrary.Vehicles;
 
 namespace cs_lab_Pojazdy
@@ -7,29 +8,12 @@ namespace cs_lab_Pojazdy
     {
         private static void Main(string[] args)
         {
-            /* AirVehicle
-             */ 
-            var plane = new AirVehicle(200, true, IVehicle.FuelType.Petrol);
-            Console.WriteLine(plane.ToString());
-            plane.Start();
-            Console.WriteLine(plane.ToString());
-            plane.IncreaseSpeed(750);
-            Console.WriteLine(plane.ToString());
-            plane.DecreaseSpeed(900);
-            Console.WriteLine(plane.ToString());
-            
-            /* Land Vehicle
-             var car = new LandVehicle(85, true, IVehicle.FuelType.Diesel, 4);
+            IVehicle car = new LandVehicle(true, 85, IVehicle.FuelType.Diesel, 4);
+            car.Start();
+            Console.WriteLine(car.Speed.ToString());
+            car.Accelerate(5);
+            Console.WriteLine(car.Speed.ToString());
             Console.WriteLine(car.ToString());
-            car.IncreaseSpeed(20);
-            Console.WriteLine(car.ToString());
-            car.IncreaseSpeed(400);
-            Console.WriteLine(car.ToString());
-            car.DecreaseSpeed(200);
-            Console.WriteLine(car.ToString());
-            car.Stop();
-            Console.WriteLine(car.ToString());
-            */
         }
     }
 }
