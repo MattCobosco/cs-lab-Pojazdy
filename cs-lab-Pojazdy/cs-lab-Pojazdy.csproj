@@ -4,10 +4,22 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <RootNamespace>cs_lab_Pojazdy</RootNamespace>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\VehiclesLibrary\ClassLibrary.csproj"/>
+        <ProjectReference Include="..\VehiclesLibrary\ClassLibrary.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="ClassLibrary\Vehicles\LandVehicle.cs" />
+      <Compile Remove="ClassLibrary\Environments\WaterEnvironment.cs" />
+      <Compile Remove="ClassLibrary\Environments\LandEnvironment.cs" />
+      <Compile Remove="ClassLibrary\Environments\IEnvironment.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="ClassLibrary\obj\Debug" />
     </ItemGroup>
 
 </Project>
