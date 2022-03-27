@@ -38,7 +38,16 @@ namespace ClassLibrary.Vehicles
         int HorsePower { get; set; }
         FuelType FuelUsed { get; set; }
         State VehicleState { get; set; }
-
+        
+        void Start()
+        {
+            // A moving vehicle cannot be started
+            if (VehicleState == State.Moving) return;
+            // A started vehicle reaches the current environment minimum speed
+            Speed = GetConvertedSpeed(CurrentEnvironment.Unit, NativeEnvironment.Unit, CurrentEnvironment.MinSpeed);
+            VehicleState = State.Moving;
+        }
+        
         void Stop()
         {
             // Vehicle cannot be stopped mid-air
@@ -47,15 +56,6 @@ namespace ClassLibrary.Vehicles
             if (VehicleState == State.Stationary) return;
             Speed = 0;
             VehicleState = State.Stationary;
-        }
-
-        void Start()
-        {
-            // A moving vehicle cannot be started
-            if (VehicleState == State.Moving) return;
-            // A started vehicle reaches the current environment minimum speed
-            Speed = GetConvertedSpeed(CurrentEnvironment.Unit, NativeEnvironment.Unit, CurrentEnvironment.MinSpeed);
-            VehicleState = State.Moving;
         }
 
         void Accelerate(double changeInNativeUnit)
