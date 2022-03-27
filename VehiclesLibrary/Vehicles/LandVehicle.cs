@@ -4,8 +4,22 @@ namespace ClassLibrary.Vehicles
 {
     public class LandVehicle : IVehicle
     {
-        // Land vehicle-only properties
+        // Land vehicle-specific properties
         private readonly int _numberOfWheels;
+        
+        // General vehicle properties
+        // A land vehicle => cannot switch environments
+        public IVehicle.VehicleType Type { get; set; } = IVehicle.VehicleType.LandVehicle;
+        // Spawns on land
+        public IEnvironment CurrentEnvironment { get; set; } = IEnvironment.Environments.LandEnvironment;
+        // Native environment is land => the unit for speed and speed changes is kph
+        public IEnvironment NativeEnvironment { get; set; } = IEnvironment.Environments.LandEnvironment;
+        public double Speed { get; set; }
+        public bool HasEngine { get; set; }
+        public int HorsePower { get; set; }
+        public IVehicle.FuelType FuelUsed { get; set; }
+        // Spawns stationary
+        public IVehicle.State VehicleState { get; set; } = IVehicle.State.Stationary;
 
         public LandVehicle(bool hasEngine, int horsePower, IVehicle.FuelType fuelType, int numberOfWheels)
         {
@@ -21,28 +35,8 @@ namespace ClassLibrary.Vehicles
                 HorsePower = 0;
                 FuelUsed = IVehicle.FuelType.None;
             }
-
             _numberOfWheels = numberOfWheels;
         }
-
-        // General vehicle properties
-        // A land vehicle => cannot switch environments
-        public IVehicle.VehicleType Type { get; set; } = IVehicle.VehicleType.LandVehicle;
-
-        // Spawns on land
-        public IEnvironment CurrentEnvironment { get; set; } = IEnvironment.Environments.LandEnvironment;
-
-        // Native environment is land => the unit for speed and its changes will be kph
-        public IEnvironment NativeEnvironment { get; set; } = IEnvironment.Environments.LandEnvironment;
-        public double Speed { get; set; }
-        public bool HasEngine { get; set; }
-        public int HorsePower { get; set; }
-
-        public IVehicle.FuelType FuelUsed { get; set; }
-
-        // Spawns stationary
-        public IVehicle.State VehicleState { get; set; } = IVehicle.State.Stationary;
-
         public override string ToString()
         {
             IVehicle vehicle = this;
