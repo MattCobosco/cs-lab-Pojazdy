@@ -10,21 +10,22 @@ namespace ClassLibrary.Vehicles
         public IVehicle.VehicleType Type { get; set; } = IVehicle.VehicleType.AirVehicle;
         // Spawns on land
         public IEnvironment CurrentEnvironment { get; set; } = IEnvironment.Environments.LandEnvironment;
-        // Native environment is air => the unit for speed and its changes will be m/s
+        // Native environment is air => the unit for speed and speed changes is m/s
         public IEnvironment NativeEnvironment { get; set; } = IEnvironment.Environments.AirEnvironment;
         public double Speed { get; set; }
         public bool HasEngine { get; set; }
         public int HorsePower { get; set; }
         public IVehicle.FuelType FuelUsed { get; set; }
+        // Spawns stationary
         public IVehicle.State VehicleState { get; set; } = IVehicle.State.Stationary;
-        
-        public AirVehicle(bool hasEngine, int horsePower, IVehicle.FuelType fuel)
+
+        public AirVehicle(bool hasEngine, int horsePower, IVehicle.FuelType fuelType)
         {
             HasEngine = hasEngine;
             if (HasEngine)
             {
                 HorsePower = horsePower;
-                FuelUsed = fuel;
+                FuelUsed = fuelType;
             }
             else
             {
@@ -43,9 +44,7 @@ namespace ClassLibrary.Vehicles
             if (CurrentEnvironment == IEnvironment.Environments.AirEnvironment) return;
             // Takeoff if takeoff speed is reached
             if (Speed >= IEnvironment.Environments.AirEnvironment.MinSpeed)
-            {
                 CurrentEnvironment = IEnvironment.Environments.AirEnvironment;
-            }
         }
 
         public void Decelerate(double changeInMps)
@@ -54,20 +53,18 @@ namespace ClassLibrary.Vehicles
             if (VehicleState == IVehicle.State.Stationary) return;
             // Decrease speed but not below the minimum speed of land environment
             Speed = Math.Max(IEnvironment.Environments.LandEnvironment.MinSpeed, Speed - changeInMps);
-            // If vehicle is already in land don't check landing requirements
+            // If vehicle is already on land don't check landing requirements
             if (CurrentEnvironment == IEnvironment.Environments.LandEnvironment) return;
             // Land if landing speed is reached
             if (Speed <= IEnvironment.Environments.AirEnvironment.MinSpeed)
-            {
                 CurrentEnvironment = IEnvironment.Environments.LandEnvironment;
-            }
         }
-        
+
         public override string ToString()
-        { 
+        {
             IVehicle vehicle = this;
-            IEnvironment.SpeedUnit nativeUnit = vehicle.NativeEnvironment.Unit;
-            IEnvironment.SpeedUnit currentUnit = vehicle.CurrentEnvironment.Unit;
+            var nativeUnit = vehicle.NativeEnvironment.Unit;
+            var currentUnit = vehicle.CurrentEnvironment.Unit;
 
             return $"Data Type: {GetType().Name}, " +
                    $"Vehicle Type: {vehicle.Type}, " +
@@ -76,7 +73,7 @@ namespace ClassLibrary.Vehicles
                    $"Environment Min Speed: {CurrentEnvironment.MinSpeed} {currentUnit}, " +
                    $"Environment Max Speed: {CurrentEnvironment.MaxSpeed} {currentUnit}, " +
                    $"Current Speed: {IVehicle.GetConvertedSpeed(nativeUnit, currentUnit, vehicle.Speed):0.00} {currentUnit}, " +
-                   $"ADDITIONAL: " +
+                   "ADDITIONAL: " +
                    $"HasEngine: {vehicle.HasEngine}, " +
                    $"Horsepower: {vehicle.HorsePower}, " +
                    $"Type of Fuel: {vehicle.FuelUsed}";
