@@ -19,7 +19,7 @@ namespace ClassLibrary.Vehicles
         // Spawns stationary
         public IVehicle.State VehicleState { get; set; } = IVehicle.State.Stationary;
 
-        public AirVehicle(bool hasEngine, int horsePower, IVehicle.FuelType fuelType)
+        protected AirVehicle(bool hasEngine, int horsePower, IVehicle.FuelType fuelType)
         {
             HasEngine = hasEngine;
             if (HasEngine)
@@ -29,6 +29,7 @@ namespace ClassLibrary.Vehicles
             }
             else
             {
+                // If no engine => horsepower is 0, fuel type is none
                 HorsePower = 0;
                 FuelUsed = IVehicle.FuelType.None;
             }

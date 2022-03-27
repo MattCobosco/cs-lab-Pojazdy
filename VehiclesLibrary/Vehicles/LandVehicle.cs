@@ -21,7 +21,7 @@ namespace ClassLibrary.Vehicles
         // Spawns stationary
         public IVehicle.State VehicleState { get; set; } = IVehicle.State.Stationary;
 
-        public LandVehicle(bool hasEngine, int horsePower, IVehicle.FuelType fuelType, int numberOfWheels)
+        protected LandVehicle(bool hasEngine, int horsePower, IVehicle.FuelType fuelType, int numberOfWheels)
         {
             HasEngine = hasEngine;
             if (HasEngine)
