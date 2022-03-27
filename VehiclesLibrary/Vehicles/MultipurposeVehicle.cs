@@ -6,12 +6,14 @@ namespace ClassLibrary.Vehicles
 {
     public class MultipurposeVehicle : IVehicle
     {
+        // Multipurpose vehicle to create all vehicles that do not fit land/air/water vehicle classes.
+        // Technically all vehicles could be created using this class.
+        
         // Multipurpose vehicle-specific properties
         private readonly int _numberOfWheels;
         private readonly int _displacement;
         private readonly bool _canOperateOnLand;
         private readonly bool _canOperateInAir;
-
         private readonly bool _canOperateOnWater;
 
         // General vehicle properties
@@ -32,7 +34,7 @@ namespace ClassLibrary.Vehicles
         // Spawns stationary
         public IVehicle.State VehicleState { get; set; } = IVehicle.State.Stationary;
 
-        public MultipurposeVehicle(bool hasEngine, int horsePower, IVehicle.FuelType fuelType,
+        protected MultipurposeVehicle(bool hasEngine, int horsePower, IVehicle.FuelType fuelType,
             bool canOperateOnLand, int numberOfWheels, bool canOperateOnWater, int displacement, bool canOperateInAir,
             IEnvironment currentEnvironment, IEnvironment nativeEnvironment)
         {
@@ -101,16 +103,14 @@ namespace ClassLibrary.Vehicles
             if (_canOperateInAir)
             {
                 // Increase speed but not above the maximum speed of air environment converted to native speed unit
-                Speed += IVehicle.GetConvertedSpeed(IEnvironment.Environments.AirEnvironment.Unit,
-                    NativeEnvironment.Unit,
-                    Math.Min(IEnvironment.Environments.AirEnvironment.MaxSpeed, Speed + changeInNativeUnit));
+                Speed = Math.Min(IEnvironment.Environments.AirEnvironment.MaxSpeed, Speed + changeInNativeUnit);
                 // If vehicle is already in air don't check takeoff requirements
                 if (CurrentEnvironment == IEnvironment.Environments.AirEnvironment) return;
                 // Takeoff if takeoff speed is reached
                 if (Speed >= IEnvironment.Environments.AirEnvironment.MinSpeed)
                     CurrentEnvironment = IEnvironment.Environments.AirEnvironment;
             }
-            // No takeoff, accelerate within max speed of current environment
+            // No takeoff, accelerate within max speed of the current environment
             else
             {
                 Speed = Math.Min(
@@ -123,6 +123,14 @@ namespace ClassLibrary.Vehicles
         {
             // A stationary vehicle cannot decelerate
             if (VehicleState == IVehicle.State.Stationary) return;
+            // Exceptions for when planes try to land in a wrong environment
+            if (!_canOperateOnLand && landingEnvironment == IEnvironment.Environments.LandEnvironment)
+                throw new Exception(
+                    "This multipurpose vehicle cannot land on land. Change its parameters and try again.");
+            if (!_canOperateOnWater && landingEnvironment == IEnvironment.Environments.WaterEnvironment)
+                throw new Exception(
+                    "This multipurpose vehicle cannot land on water. Change its parameters and try again.");
+            
             if (CurrentEnvironment == IEnvironment.Environments.AirEnvironment && landingEnvironment != null)
             {
                 // If vehicle is in air and landing environment is not null, it can try to land
