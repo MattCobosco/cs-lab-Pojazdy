@@ -3,7 +3,6 @@ using ClassLibrary.Environments;
 
 namespace ClassLibrary.Vehicles
 {
-    // TODO: Finish WaterVehicle class
     public class WaterVehicle : IVehicle
     {
         // Water vehicle-specific properties
@@ -23,7 +22,7 @@ namespace ClassLibrary.Vehicles
         // Spawns stationary
         public IVehicle.State VehicleState { get; set; } = IVehicle.State.Stationary;
 
-        public WaterVehicle(bool hasEngine, int horsePower, int displacement)
+        protected WaterVehicle(bool hasEngine, int horsePower, int displacement)
         {
             HasEngine = hasEngine;
             if (hasEngine)
@@ -33,6 +32,7 @@ namespace ClassLibrary.Vehicles
             }
             else
             {
+                // If no engine => horsepower is 0, fuel type is none
                 HorsePower = 0;
                 FuelUsed = IVehicle.FuelType.None;
             }
