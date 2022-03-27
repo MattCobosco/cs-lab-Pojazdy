@@ -11,7 +11,7 @@ namespace ClassLibrary.Vehicles
             Diesel,
             Electric,
             Hybrid,
-            Avgas,
+            AvGas,
             Other,
             None
         }
@@ -82,8 +82,8 @@ namespace ClassLibrary.Vehicles
             {
                 IEnvironment.SpeedUnit.Kph when toUnit == IEnvironment.SpeedUnit.Mps => speed / 3.6,
                 IEnvironment.SpeedUnit.Mps when toUnit == IEnvironment.SpeedUnit.Kph => speed * 3.6,
-                IEnvironment.SpeedUnit.Kph when toUnit == IEnvironment.SpeedUnit.Knots => speed * 1.852,
-                IEnvironment.SpeedUnit.Knots when toUnit == IEnvironment.SpeedUnit.Kph => speed / 1.852,
+                IEnvironment.SpeedUnit.Kph when toUnit == IEnvironment.SpeedUnit.Knots => speed / 1.852,
+                IEnvironment.SpeedUnit.Knots when toUnit == IEnvironment.SpeedUnit.Kph => speed * 1.852,
                 IEnvironment.SpeedUnit.Mps when toUnit == IEnvironment.SpeedUnit.Knots => speed * 1.944,
                 IEnvironment.SpeedUnit.Knots when toUnit == IEnvironment.SpeedUnit.Mps => speed / 1.944,
                 _ => speed
