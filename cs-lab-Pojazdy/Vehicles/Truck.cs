@@ -2,11 +2,11 @@
 
 namespace Vehicles;
 
-public class Car : LandVehicle
+public class Truck : LandVehicle
 {
     private readonly IVehicle _vehicle;
     
-    public Car(int horsePower, IVehicle.FuelType fuelType) : base(true, horsePower, fuelType, 4)
+    public Truck(int horsePower) : base(true, horsePower, IVehicle.FuelType.Diesel, 18)
     {
         _vehicle = this;
     }
