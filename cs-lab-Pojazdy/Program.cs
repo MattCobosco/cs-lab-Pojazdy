@@ -59,6 +59,7 @@ internal class Program
         seaplaneNoWheels.Accelerate(10);
         // Makes the seaplane land on water
         seaplaneNoWheels.Decelerate(10, IEnvironment.Environments.WaterEnvironment);
+        // Stops the seaplane
         seaplaneNoWheels.Stop();
 
 
@@ -73,22 +74,22 @@ internal class Program
         vehicleList.Add(seaplaneNoWheels);
 
         Console.WriteLine("All vehicles:");
-        foreach (var vehicle in vehicleList) Console.WriteLine(vehicle.ToString());
+        foreach (var vehicle in vehicleList) Console.WriteLine($"\n{vehicle}");
 
         var landOnly = vehicleList.FindAll(x => x.NativeEnvironment == IEnvironment.Environments.LandEnvironment);
-        Console.WriteLine("\nLand vehicles:");
-        foreach (var vehicle in landOnly) Console.WriteLine(vehicle.ToString());
+        Console.WriteLine("\n\nLand vehicles:");
+        foreach (var vehicle in landOnly) Console.WriteLine($"\n{vehicle}");
 
-        Console.WriteLine("\nAll vehicles by speed ascending:");
+        Console.WriteLine("\n\nAll vehicles by speed ascending:");
         foreach (var vehicle in vehicleList.OrderBy(x =>
                      IVehicle.GetConvertedSpeed(x.NativeEnvironment.Unit, IEnvironment.SpeedUnit.Kph, x.Speed)))
-            Console.WriteLine(vehicle.ToString());
+            Console.WriteLine($"\n{vehicle}");
 
-        Console.WriteLine("\nAll vehicles currently on land environment by speed descending:");
+        Console.WriteLine("\n\nAll vehicles currently on land environment by speed descending:");
         foreach (var vehicle in vehicleList
                      .FindAll(x => x.CurrentEnvironment == IEnvironment.Environments.LandEnvironment)
                      .OrderByDescending(x =>
                          IVehicle.GetConvertedSpeed(x.NativeEnvironment.Unit, IEnvironment.SpeedUnit.Kph, x.Speed)))
-            Console.WriteLine(vehicle.ToString());
+            Console.WriteLine($"\n{vehicle}");
     }
 }
