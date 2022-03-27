@@ -1,22 +1,94 @@
-﻿
-using System;
+﻿using ClassLibrary.Environments;
 using ClassLibrary.Vehicles;
+using Vehicles;
 
-namespace cs_lab_Pojazdy
+namespace cs_lab_Pojazdy;
+
+internal class Program
 {
-    internal class Program
+    private static void Main()
     {
-        private static void Main(string[] args)
-        {
-            IVehicle airplane = new AirVehicle(true, 500, IVehicle.FuelType.Avgas);
-            airplane.Start();
-            Console.WriteLine(airplane.ToString());
-            airplane.Accelerate(15);
-            Console.WriteLine(airplane.ToString());
-            airplane.Decelerate(10);
-            Console.WriteLine(airplane.ToString());
-            airplane.Stop();
-            Console.WriteLine(airplane.ToString());
-        }
+        var vehicleList = new List<IVehicle>();
+
+        var passengerCar = new Car(85, IVehicle.FuelType.Petrol);
+        passengerCar.Start();
+        passengerCar.Accelerate(139);
+
+        var bike = new Bike();
+        bike.Start();
+        bike.Accelerate(15);
+
+        var regularPlane = new RegularPlane(1000);
+        regularPlane.Start();
+        regularPlane.Accelerate(14);
+
+        var glider = new Glider();
+        glider.Start();
+        glider.Accelerate(50);
+
+        var motorBoat = new MotorBoat(750, 5000);
+        motorBoat.Start();
+        motorBoat.Accelerate(15);
+
+        var paddleBoat = new PaddleBoat();
+        paddleBoat.Start();
+        paddleBoat.Accelerate(1);
+
+        // An amphibian spawned in water
+        var amphibian = new Amphibian(200, IVehicle.FuelType.Petrol, 20, IEnvironment.Environments.WaterEnvironment);
+        amphibian.Start();
+        amphibian.Accelerate(30);
+        amphibian.Decelerate(10, null);
+        //Changes amphibian environment to land
+        amphibian.ChangeEnvironment(IEnvironment.Environments.LandEnvironment);
+
+        // A seaplane with wheels spawned in water
+        var seaplaneWheels = new SeaplaneWheels(250, IEnvironment.Environments.WaterEnvironment, 100);
+        seaplaneWheels.Start();
+        seaplaneWheels.Accelerate(10);
+        // Makes the seaplane take off
+        seaplaneWheels.Accelerate(20);
+        // Makes the seaplane land on land
+        seaplaneWheels.Decelerate(25, IEnvironment.Environments.LandEnvironment);
+
+        // A seaplane without wheels spawned in water
+        var seaplaneNoWheels = new SeaplaneNoWheels(250, 100);
+        seaplaneNoWheels.Start();
+        seaplaneNoWheels.Accelerate(10);
+        // Makes the seaplane take off
+        seaplaneNoWheels.Accelerate(10);
+        // Makes the seaplane land on water
+        seaplaneNoWheels.Decelerate(10, IEnvironment.Environments.WaterEnvironment);
+        seaplaneNoWheels.Stop();
+
+
+        vehicleList.Add(passengerCar);
+        vehicleList.Add(bike);
+        vehicleList.Add(regularPlane);
+        vehicleList.Add(glider);
+        vehicleList.Add(motorBoat);
+        vehicleList.Add(paddleBoat);
+        vehicleList.Add(amphibian);
+        vehicleList.Add(seaplaneWheels);
+        vehicleList.Add(seaplaneNoWheels);
+
+        Console.WriteLine("All vehicles:");
+        foreach (var vehicle in vehicleList) Console.WriteLine(vehicle.ToString());
+
+        var landOnly = vehicleList.FindAll(x => x.NativeEnvironment == IEnvironment.Environments.LandEnvironment);
+        Console.WriteLine("\nLand vehicles:");
+        foreach (var vehicle in landOnly) Console.WriteLine(vehicle.ToString());
+
+        Console.WriteLine("\nAll vehicles by speed ascending:");
+        foreach (var vehicle in vehicleList.OrderBy(x =>
+                     IVehicle.GetConvertedSpeed(x.NativeEnvironment.Unit, IEnvironment.SpeedUnit.Kph, x.Speed)))
+            Console.WriteLine(vehicle.ToString());
+
+        Console.WriteLine("\nAll vehicles currently on land environment by speed descending:");
+        foreach (var vehicle in vehicleList
+                     .FindAll(x => x.CurrentEnvironment == IEnvironment.Environments.LandEnvironment)
+                     .OrderByDescending(x =>
+                         IVehicle.GetConvertedSpeed(x.NativeEnvironment.Unit, IEnvironment.SpeedUnit.Kph, x.Speed)))
+            Console.WriteLine(vehicle.ToString());
     }
 }
